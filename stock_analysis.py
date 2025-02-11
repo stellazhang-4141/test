@@ -8,7 +8,7 @@ def get_stock_info(symbol):
     try:
         stock = yf.Ticker(symbol)
         hist = stock.history(period="1y")
-        
+
         # Generate stock price trend chart (1 year)
         plt.figure(figsize=(10, 5))
         plt.plot(hist.index, hist["Close"], label="Stock Price", color="blue")
@@ -16,7 +16,7 @@ def get_stock_info(symbol):
         plt.xlabel("Date")
         plt.ylabel("Price")
         plt.legend()
-        
+
         img = BytesIO()
         plt.savefig(img, format="png")
         img.seek(0)
@@ -30,32 +30,11 @@ def get_stock_info(symbol):
         plt.xlabel("Date")
         plt.ylabel("Price")
         plt.legend()
-        
+
         img_month = BytesIO()
         plt.savefig(img_month, format="png")
         img_month.seek(0)
         plot_url_month = base64.b64encode(img_month.getvalue()).decode()
-
-        # Extract key financial data, merging all relevant financial metrics
-        def extract_financial_data(df, keys):
-            data = {}
-            for key in keys:
-                if key in df.index:
-                    value = df.loc[key].values[0]
-                    data[key] = value if pd.notna(value) else "N/A"
-                else:
-                    data[key] = "N/A"
-            return data
-
-        financial_keys = [
-            "Total Revenue", "Operating Income", "Net Income", "Total Assets",
-            "Total Liabilities Net Minority Interest", "Total Equity Gross Minority Interest",
-            "Total Cash From Operating Activities", "Total Cash From Financing Activities"
-        ]
-
-        financial_data = {**extract_financial_data(stock.financials, financial_keys),
-                          **extract_financial_data(stock.balance_sheet, financial_keys),
-                          **extract_financial_data(stock.cashflow, financial_keys)}
         
         key_metrics = {
             "Market Cap": stock.info.get("marketCap", "N/A"),
@@ -67,10 +46,8 @@ def get_stock_info(symbol):
         stock_info = {
             "name": stock.info.get("longName", "Unknown"),
             "symbol": symbol,
-            "price": stock.history(period="1d")["Close"][0],
             "plot_url": plot_url,
             "plot_url_month": plot_url_month,
-            "financial_data": financial_data,
             "key_metrics": key_metrics,
         }
         return stock_info

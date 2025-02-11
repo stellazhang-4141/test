@@ -28,22 +28,7 @@
 
         {% if stock_data %}
             <h2>{{ stock_data.name }} ({{ stock_data.symbol }})</h2>
-            <p>Current Price: ${{ stock_data.price }}</p>
-
-            <h3>Key Financial Data</h3>
-            <table>
-                <tr>
-                    <th>Metric</th>
-                    <th>Value</th>
-                </tr>
-                {% for key, value in stock_data.financial_data.items() %}
-                <tr>
-                    <td>{{ key }}</td>
-                    <td>${{ value }}</td>
-                </tr>
-                {% endfor %}
-            </table>
-
+            
             <h3>Key Evaluation Metrics</h3>
             <table>
                 <tr>
