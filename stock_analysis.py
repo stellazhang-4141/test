@@ -35,7 +35,21 @@ def get_stock_info(symbol):
         plt.savefig(img_month, format="png")
         img_month.seek(0)
         plot_url_month = base64.b64encode(img_month.getvalue()).decode()
-        
+
+        # Generate last 5 days stock price trend chart
+        hist_day = stock.history(period="5d")
+        plt.figure(figsize=(10, 5))
+        plt.plot(hist_day.index, hist_day["Close"], label="Stock Price (Last 5 Days)", color="orange")
+        plt.title(f"{symbol} Stock Price Trend (Last 5 Days)")
+        plt.xlabel("Date")
+        plt.ylabel("Price")
+        plt.legend()
+
+        img_day = BytesIO()
+        plt.savefig(img_day, format="png")
+        img_day.seek(0)
+        plot_url_day = base64.b64encode(img_day.getvalue()).decode()
+
         key_metrics = {
             "Market Cap": stock.info.get("marketCap", "N/A"),
             "P/B Ratio": stock.info.get("priceToBook", "N/A"),
@@ -48,6 +62,7 @@ def get_stock_info(symbol):
             "symbol": symbol,
             "plot_url": plot_url,
             "plot_url_month": plot_url_month,
+            "plot_url_day": plot_url_day,
             "key_metrics": key_metrics,
         }
         return stock_info

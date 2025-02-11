@@ -48,6 +48,7 @@
             <h3>Stock Price Trends</h3>
             <img class="image-class" src="data:image/png;base64,{{ stock_data.plot_url }}" alt="Stock Chart (1 Year)">
             <img class="image-class" src="data:image/png;base64,{{ stock_data.plot_url_month }}" alt="Stock Chart (1 Month)">
+            <img class="image-class" src="data:image/png;base64,{{ stock_data.plot_url_day }}" alt="Stock Chart (Last 5 Days)">
             
             <h3>Stock Trend Analysis</h3>
             <p>{{ trend_summary }}</p>
@@ -59,5 +60,4 @@
     </div>
 </body>
 </html>
-
 
