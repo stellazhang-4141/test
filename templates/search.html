@@ -19,33 +19,35 @@
             <p>Current Price: ${{ stock_data.price }}</p>
 
             <h3>Key Financial Metrics</h3>
-            <table border="1">
+            <table border="1" style="width: 100%; text-align: center;">
                 <tr>
                     <th>Market Cap</th>
-                    <td>${{ stock_data.key_metrics["Market Cap"] }}</td>
-                </tr>
-                <tr>
                     <th>P/B Ratio</th>
-                    <td>{{ stock_data.key_metrics["P/B Ratio"] }}</td>
-                </tr>
-                <tr>
                     <th>P/E Ratio</th>
-                    <td>{{ stock_data.key_metrics["P/E Ratio"] }}</td>
+                    <th>EPS</th>
                 </tr>
                 <tr>
-                    <th>EPS</th>
+                    <td>${{ stock_data.key_metrics["Market Cap"] }}</td>
+                    <td>{{ stock_data.key_metrics["P/B Ratio"] }}</td>
+                    <td>{{ stock_data.key_metrics["P/E Ratio"] }}</td>
                     <td>{{ stock_data.key_metrics["EPS"] }}</td>
                 </tr>
             </table>
 
             <h3>Income Statement</h3>
-            {{ stock_data.financials|safe }}
+            <div style="display: flex; flex-wrap: wrap; justify-content: center;">
+                {{ stock_data.financials|safe }}
+            </div>
 
             <h3>Balance Sheet</h3>
-            {{ stock_data.balance_sheet|safe }}
+            <div style="display: flex; flex-wrap: wrap; justify-content: center;">
+                {{ stock_data.balance_sheet|safe }}
+            </div>
 
             <h3>Cash Flow Statement</h3>
-            {{ stock_data.cashflow|safe }}
+            <div style="display: flex; flex-wrap: wrap; justify-content: center;">
+                {{ stock_data.cashflow|safe }}
+            </div>
 
             <h3>Stock Price Trends</h3>
             <img class="image-class" src="data:image/png;base64,{{ stock_data.plot_url }}" alt="Stock Chart (1 Year)">
