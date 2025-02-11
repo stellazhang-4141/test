@@ -5,6 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stock Analysis</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .financial-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .financial-box {
+            width: 30%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            margin: 5px;
+            background-color: #f9f9f9;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 5px;
+            text-align: left;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -19,7 +42,7 @@
             <p>Current Price: ${{ stock_data.price }}</p>
 
             <h3>Key Financial Metrics</h3>
-            <table border="1" style="width: 100%; text-align: center;">
+            <table>
                 <tr>
                     <th>Market Cap</th>
                     <th>P/B Ratio</th>
@@ -34,19 +57,20 @@
                 </tr>
             </table>
 
-            <h3>Income Statement</h3>
-            <div style="display: flex; flex-wrap: wrap; justify-content: center;">
-                {{ stock_data.financials|safe }}
-            </div>
-
-            <h3>Balance Sheet</h3>
-            <div style="display: flex; flex-wrap: wrap; justify-content: center;">
-                {{ stock_data.balance_sheet|safe }}
-            </div>
-
-            <h3>Cash Flow Statement</h3>
-            <div style="display: flex; flex-wrap: wrap; justify-content: center;">
-                {{ stock_data.cashflow|safe }}
+            <h3>Financial Statements</h3>
+            <div class="financial-container">
+                <div class="financial-box">
+                    <h4>Income Statement</h4>
+                    {{ stock_data.financials|safe }}
+                </div>
+                <div class="financial-box">
+                    <h4>Balance Sheet</h4>
+                    {{ stock_data.balance_sheet|safe }}
+                </div>
+                <div class="financial-box">
+                    <h4>Cash Flow Statement</h4>
+                    {{ stock_data.cashflow|safe }}
+                </div>
             </div>
 
             <h3>Stock Price Trends</h3>
