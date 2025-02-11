@@ -8,7 +8,7 @@ def get_stock_info(symbol):
     try:
         stock = yf.Ticker(symbol)
         hist = stock.history(period="1y")
-        
+
         # Generate stock price trend chart (1 year)
         plt.figure(figsize=(10, 5))
         plt.plot(hist.index, hist["Close"], label="Stock Price", color="blue")
@@ -16,7 +16,7 @@ def get_stock_info(symbol):
         plt.xlabel("Date")
         plt.ylabel("Price")
         plt.legend()
-        
+
         img = BytesIO()
         plt.savefig(img, format="png")
         img.seek(0)
@@ -30,18 +30,19 @@ def get_stock_info(symbol):
         plt.xlabel("Date")
         plt.ylabel("Price")
         plt.legend()
-        
+
         img_month = BytesIO()
         plt.savefig(img_month, format="png")
         img_month.seek(0)
         plot_url_month = base64.b64encode(img_month.getvalue()).decode()
 
-        # Extract key financial data
+        # Extract key financial data, ensuring no NaN values
         def extract_financial_data(df, keys):
             data = {}
             for key in keys:
                 if key in df.index:
-                    data[key] = df.loc[key].values[0]  
+                    value = df.loc[key].values[0]
+                    data[key] = value if pd.notna(value) else "N/A"
                 else:
                     data[key] = "N/A"
             return data
@@ -71,31 +72,3 @@ def get_stock_info(symbol):
         return stock_info
     except Exception as e:
         return {"error": f"Unable to retrieve data for {symbol}: {str(e)}"}
-
-def predict_stock_trend(symbol):
-    try:
-        stock = yf.Ticker(symbol)
-        hist = stock.history(period="6mo")
-        last_close = hist["Close"][-1]
-        
-        # Simple future price prediction: assume a 2% increase
-        future_price = last_close * 1.02
-        future_date = pd.date_range(hist.index[-1], periods=30, freq='B')
-        future_prices = [last_close * (1 + 0.0008 * i) for i in range(30)]
-
-        # Generate future stock price trend chart
-        plt.figure(figsize=(10, 5))
-        plt.plot(future_date, future_prices, label="Future Price", color="red")
-        plt.title(f"{symbol} Future Stock Price Projection")
-        plt.xlabel("Date")
-        plt.ylabel("Price")
-        plt.legend()
-        
-        img = BytesIO()
-        plt.savefig(img, format="png")
-        img.seek(0)
-        future_plot_url = base64.b64encode(img.getvalue()).decode()
-
-        return f"Predicted future stock price ({future_date[-1].date()}): {future_price:.2f} USD", future_plot_url
-    except Exception as e:
-        return f"Prediction failed: {str(e)}", None

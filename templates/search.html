@@ -6,16 +6,6 @@
     <title>Stock Analysis</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
-        }
         .financial-container {
             display: flex;
             justify-content: space-around;
@@ -23,9 +13,21 @@
         }
         .financial-box {
             width: 30%;
-            padding: 10px;
+            min-width: 250px;
+            padding: 15px;
             border: 1px solid #ccc;
             background-color: #f9f9f9;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
         }
     </style>
 </head>
