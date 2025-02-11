@@ -36,7 +36,7 @@ def get_stock_info(symbol):
         img_month.seek(0)
         plot_url_month = base64.b64encode(img_month.getvalue()).decode()
 
-        # Extract key financial data, ensuring no NaN values
+        # Extract key financial data, merging all relevant financial metrics
         def extract_financial_data(df, keys):
             data = {}
             for key in keys:
@@ -47,10 +47,16 @@ def get_stock_info(symbol):
                     data[key] = "N/A"
             return data
 
-        financials = extract_financial_data(stock.financials, ["Total Revenue", "Operating Income", "Net Income"])
-        balance_sheet = extract_financial_data(stock.balance_sheet, ["Total Assets", "Total Liabilities Net Minority Interest", "Total Equity Gross Minority Interest"])
-        cashflow = extract_financial_data(stock.cashflow, ["Total Cash From Operating Activities", "Total Cash From Financing Activities"])
+        financial_keys = [
+            "Total Revenue", "Operating Income", "Net Income", "Total Assets",
+            "Total Liabilities Net Minority Interest", "Total Equity Gross Minority Interest",
+            "Total Cash From Operating Activities", "Total Cash From Financing Activities"
+        ]
 
+        financial_data = {**extract_financial_data(stock.financials, financial_keys),
+                          **extract_financial_data(stock.balance_sheet, financial_keys),
+                          **extract_financial_data(stock.cashflow, financial_keys)}
+        
         key_metrics = {
             "Market Cap": stock.info.get("marketCap", "N/A"),
             "P/B Ratio": stock.info.get("priceToBook", "N/A"),
@@ -64,39 +70,9 @@ def get_stock_info(symbol):
             "price": stock.history(period="1d")["Close"][0],
             "plot_url": plot_url,
             "plot_url_month": plot_url_month,
-            "financials": financials,
-            "balance_sheet": balance_sheet,
-            "cashflow": cashflow,
+            "financial_data": financial_data,
             "key_metrics": key_metrics,
         }
         return stock_info
     except Exception as e:
         return {"error": f"Unable to retrieve data for {symbol}: {str(e)}"}
-
-def predict_stock_trend(symbol):
-    try:
-        stock = yf.Ticker(symbol)
-        hist = stock.history(period="6mo")
-        last_close = hist["Close"][-1]
-        
-        # Simple future price prediction: assume a 2% increase
-        future_price = last_close * 1.02
-        future_date = pd.date_range(hist.index[-1], periods=30, freq='B')
-        future_prices = [last_close * (1 + 0.0008 * i) for i in range(30)]
-
-        # Generate future stock price trend chart
-        plt.figure(figsize=(10, 5))
-        plt.plot(future_date, future_prices, label="Future Price", color="red")
-        plt.title(f"{symbol} Future Stock Price Projection")
-        plt.xlabel("Date")
-        plt.ylabel("Price")
-        plt.legend()
-        
-        img = BytesIO()
-        plt.savefig(img, format="png")
-        img.seek(0)
-        future_plot_url = base64.b64encode(img.getvalue()).decode()
-
-        return f"Predicted future stock price ({future_date[-1].date()}): {future_price:.2f} USD", future_plot_url
-    except Exception as e:
-        return f"Prediction failed: {str(e)}", None
