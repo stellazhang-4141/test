@@ -6,26 +6,26 @@
     <title>Stock Analysis</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
         .financial-container {
             display: flex;
+            justify-content: space-around;
             flex-wrap: wrap;
-            justify-content: space-between;
         }
         .financial-box {
             width: 30%;
             padding: 10px;
             border: 1px solid #ccc;
-            margin: 5px;
             background-color: #f9f9f9;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid black;
-            padding: 5px;
-            text-align: left;
         }
     </style>
 </head>
@@ -61,15 +61,36 @@
             <div class="financial-container">
                 <div class="financial-box">
                     <h4>Income Statement</h4>
-                    {{ stock_data.financials|safe }}
+                    <table>
+                        {% for key, value in stock_data.financials.items() %}
+                        <tr>
+                            <td>{{ key }}</td>
+                            <td>${{ value[0] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
                 </div>
                 <div class="financial-box">
                     <h4>Balance Sheet</h4>
-                    {{ stock_data.balance_sheet|safe }}
+                    <table>
+                        {% for key, value in stock_data.balance_sheet.items() %}
+                        <tr>
+                            <td>{{ key }}</td>
+                            <td>${{ value[0] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
                 </div>
                 <div class="financial-box">
                     <h4>Cash Flow Statement</h4>
-                    {{ stock_data.cashflow|safe }}
+                    <table>
+                        {% for key, value in stock_data.cashflow.items() %}
+                        <tr>
+                            <td>{{ key }}</td>
+                            <td>${{ value[0] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
                 </div>
             </div>
 
