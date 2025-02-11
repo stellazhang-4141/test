@@ -1,16 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-</head>
-<body>
-    <div class="container">
-        <h2>Welcome, {{ username }}!</h2>
-        <p>You are successfully logged in.</p>
-        <a href="{{ url_for('logout') }}"><button>Logout</button></a>
-    </div>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+<h1>股票仪表盘</h1>
+
+<form method="POST">
+    <input type="text" name="stock_symbol" placeholder="输入股票代码">
+    <button type="submit">查询</button>
+</form>
+
+{% if stock_data %}
+    <h2>{{ stock_data.name }} ({{ stock_data.symbol }})</h2>
+    <p>当前价格: ${{ stock_data.price }}</p>
+    <p>市盈率 (PE): {{ stock_data.pe_ratio }}</p>
+    <p>每股收益 (EPS): {{ stock_data.eps }}</p>
+    <img src="data:image/png;base64,{{ stock_data.plot_url }}" alt="Stock Trend">
+    
+    <h3>AI 预测</h3>
+    <p>{{ prediction }}</p>
+
+    <h3>市场情绪分析</h3>
+    <p>{{ summary }}</p>
+{% endif %}
+
+{% endblock %}
