@@ -65,7 +65,7 @@
                         {% for key, value in stock_data.financials.items() %}
                         <tr>
                             <td>{{ key }}</td>
-                            <td>${{ value[0] }}</td>
+                            <td>${{ value }}</td>
                         </tr>
                         {% endfor %}
                     </table>
@@ -76,7 +76,7 @@
                         {% for key, value in stock_data.balance_sheet.items() %}
                         <tr>
                             <td>{{ key }}</td>
-                            <td>${{ value[0] }}</td>
+                            <td>${{ value }}</td>
                         </tr>
                         {% endfor %}
                     </table>
@@ -87,7 +87,7 @@
                         {% for key, value in stock_data.cashflow.items() %}
                         <tr>
                             <td>{{ key }}</td>
-                            <td>${{ value[0] }}</td>
+                            <td>${{ value }}</td>
                         </tr>
                         {% endfor %}
                     </table>
