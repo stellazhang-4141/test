@@ -76,3 +76,30 @@ def get_stock_info(symbol):
         return stock_info
     except Exception as e:
         return {"error": f"Unable to retrieve data for {symbol}: {str(e)}"}
+
+def predict_stock_trend(symbol):
+    try:
+        stock = yf.Ticker(symbol)
+        hist = stock.history(period="6mo")
+        last_close = hist["Close"][-1]
+
+        # Predict next 30 business days
+        future_dates = pd.date_range(hist.index[-1], periods=30, freq="B")
+        future_prices = [last_close * (1 + 0.001 * i) for i in range(30)]
+
+        # Generate future stock price trend chart
+        plt.figure(figsize=(10, 5))
+        plt.plot(future_dates, future_prices, label="Predicted Price", color="red")
+        plt.title(f"{symbol} Future Stock Price Projection")
+        plt.xlabel("Date")
+        plt.ylabel("Price")
+        plt.legend()
+
+        img = BytesIO()
+        plt.savefig(img, format="png")
+        img.seek(0)
+        future_plot_url = base64.b64encode(img.getvalue()).decode()
+
+        return f"Predicted future stock price ({future_dates[-1].date()}): ${future_prices[-1]:.2f}", future_plot_url
+    except Exception as e:
+        return f"Prediction failed: {str(e)}", None
