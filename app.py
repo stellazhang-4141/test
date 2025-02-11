@@ -17,7 +17,8 @@ def home():
         prediction, future_trend_plot = predict_stock_trend(stock_symbol)
         trend_summary = summarize_stock_trend(stock_symbol)
 
-    return render_template("search.html", stock_data=stock_data, prediction=prediction, trend_summary=trend_summary, future_trend_plot=future_trend_plot)
+    return render_template("search.html", stock_data=stock_data, prediction=prediction, trend_summary=trend_summary, 
+                           future_trend_plot=future_trend_plot)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True)
