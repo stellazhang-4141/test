@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stock Analysis</title>
+    <title>股票分析</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
@@ -21,12 +21,14 @@
             <p>每股收益 (EPS): {{ stock_data.eps }}</p>
             <img class="image-class" src="data:image/png;base64,{{ stock_data.plot_url }}" alt="Stock Chart">
             
+            <h3>股价趋势分析</h3>
+            <p>{{ trend_summary }}</p>
+            
             <h3>AI 预测</h3>
             <p>{{ prediction }}</p>
-
-            <h3>市场情绪分析</h3>
-            <p>{{ summary }}</p>
+            <img class="image-class" src="data:image/png;base64,{{ future_trend_plot }}" alt="Future Stock Chart">
         {% endif %}
     </div>
 </body>
 </html>
+

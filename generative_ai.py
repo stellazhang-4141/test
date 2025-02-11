@@ -12,3 +12,4 @@ def summarize_stock_trend(stock_symbol):
 def get_stock_news(stock_symbol):
     # 模拟新闻数据，实际项目中可接入 API
     return f"{stock_symbol} 公司近期市场表现良好，投资者关注其财报发布。"
+
