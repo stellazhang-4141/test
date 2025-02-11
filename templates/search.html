@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Analysis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>请输入股票代码</h2>
+        <form method="POST">
+            <input type="text" name="stock_symbol" placeholder="如 AAPL, TSLA, MSFT" required>
+            <button type="submit">查询</button>
+        </form>
+
+        {% if stock_data %}
+            <h2>{{ stock_data.name }} ({{ stock_data.symbol }})</h2>
+            <p>当前股价: ${{ stock_data.price }}</p>
+            <p>市盈率 (PE): {{ stock_data.pe_ratio }}</p>
+            <p>每股收益 (EPS): {{ stock_data.eps }}</p>
+            <img class="image-class" src="data:image/png;base64,{{ stock_data.plot_url }}" alt="Stock Chart">
+            
+            <h3>AI 预测</h3>
+            <p>{{ prediction }}</p>
+
+            <h3>市场情绪分析</h3>
+            <p>{{ summary }}</p>
+        {% endif %}
+    </div>
+</body>
+</html>

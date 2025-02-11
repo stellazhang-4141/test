@@ -1,5 +1,6 @@
-flask
-flask-sqlalchemy
-flask-login
-werkzeug
-flask_migrate
+Flask
+yfinance
+matplotlib
+pandas
+transformers
+torch
