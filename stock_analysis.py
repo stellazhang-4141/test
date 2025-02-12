@@ -11,29 +11,31 @@ def get_stock_info(symbol):
         hist = stock.history(period="1y")
 
         # Generate stock price trend chart (1 year)
-        plt.figure(figsize=(10, 5))
+        plt.figure(figsize=(8, 4))
         plt.plot(hist.index, hist["Close"], label="Stock Price", color="blue")
         plt.title(f"{symbol} Stock Price Trend (1 Year)")
         plt.xlabel("Date")
         plt.ylabel("Price")
         plt.legend()
+        plt.grid(True)
 
         img = BytesIO()
-        plt.savefig(img, format="png")
+        plt.savefig(img, format="png", bbox_inches='tight')
         img.seek(0)
         plot_url = base64.b64encode(img.getvalue()).decode()
 
         # Generate last month stock price trend chart
         hist_month = stock.history(period="1mo")
-        plt.figure(figsize=(10, 5))
+        plt.figure(figsize=(8, 4))
         plt.plot(hist_month.index, hist_month["Close"], label="Stock Price (1 Month)", color="green")
         plt.title(f"{symbol} Stock Price Trend (1 Month)")
         plt.xlabel("Date")
         plt.ylabel("Price")
         plt.legend()
+        plt.grid(True)
 
         img_month = BytesIO()
-        plt.savefig(img_month, format="png")
+        plt.savefig(img_month, format="png", bbox_inches='tight')
         img_month.seek(0)
         plot_url_month = base64.b64encode(img_month.getvalue()).decode()
         
@@ -69,16 +71,17 @@ def predict_stock_trend(symbol):
         forecast = model_fit.forecast(steps=30)
 
         # Generate future stock price trend chart
-        plt.figure(figsize=(10, 5))
+        plt.figure(figsize=(8, 4))
         plt.plot(hist.index, hist, label="Historical Price", color="blue")
         plt.plot(future_dates, forecast, label="Predicted Price", color="red", linestyle='dashed')
         plt.title(f"{symbol} Future Stock Price Projection (ARIMA)")
         plt.xlabel("Date")
         plt.ylabel("Price")
         plt.legend()
+        plt.grid(True)
 
         img = BytesIO()
-        plt.savefig(img, format="png")
+        plt.savefig(img, format="png", bbox_inches='tight')
         img.seek(0)
         future_plot_url = base64.b64encode(img.getvalue()).decode()
 
