@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from io import BytesIO
 import base64
+from statsmodels.tsa.arima.model import ARIMA
 
 def get_stock_info(symbol):
     try:
@@ -57,17 +58,21 @@ def get_stock_info(symbol):
 def predict_stock_trend(symbol):
     try:
         stock = yf.Ticker(symbol)
-        hist = stock.history(period="6mo")
-        last_close = hist["Close"][-1]
+        hist = stock.history(period="6mo")["Close"]
+
+        # Fit ARIMA model
+        model = ARIMA(hist, order=(5, 1, 0))  # ARIMA(p=5, d=1, q=0)
+        model_fit = model.fit()
 
         # Predict next 30 business days
         future_dates = pd.date_range(hist.index[-1], periods=30, freq="B")
-        future_prices = [last_close * (1 + 0.001 * i) for i in range(30)]
+        forecast = model_fit.forecast(steps=30)
 
         # Generate future stock price trend chart
         plt.figure(figsize=(10, 5))
-        plt.plot(future_dates, future_prices, label="Predicted Price", color="red")
-        plt.title(f"{symbol} Future Stock Price Projection")
+        plt.plot(hist.index, hist, label="Historical Price", color="blue")
+        plt.plot(future_dates, forecast, label="Predicted Price", color="red", linestyle='dashed')
+        plt.title(f"{symbol} Future Stock Price Projection (ARIMA)")
         plt.xlabel("Date")
         plt.ylabel("Price")
         plt.legend()
@@ -77,6 +82,6 @@ def predict_stock_trend(symbol):
         img.seek(0)
         future_plot_url = base64.b64encode(img.getvalue()).decode()
 
-        return f"Predicted future stock price ({future_dates[-1].date()}): ${future_prices[-1]:.2f}", future_plot_url
+        return f"Predicted future stock price ({future_dates[-1].date()}): ${forecast.iloc[-1]:.2f}", future_plot_url
     except Exception as e:
         return f"Prediction failed: {str(e)}", None
